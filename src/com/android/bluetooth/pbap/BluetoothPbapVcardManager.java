@@ -1095,7 +1095,7 @@ public class BluetoothPbapVcardManager {
 
     /**
      * Get size of the cursor without duplicated contact id. This assumes the
-     * given cursor is sorted by CONATCT_ID.
+     * given cursor is sorted by CONTACT_ID.
      */
     private static final int getDistinctContactIdSize(Cursor cursor) {
         final int contactIdColumn = cursor.getColumnIndex(Data.CONTACT_ID);
@@ -1118,7 +1118,7 @@ public class BluetoothPbapVcardManager {
 
     /**
      * Append "display_name,contact_id" string array from cursor to ArrayList.
-     * This assumes the given cursor is sorted by CONATCT_ID.
+     * This assumes the given cursor is sorted by CONTACT_ID.
      */
     private static void appendDistinctNameIdList(ArrayList<String> resultList,
             String defaultName, Cursor cursor) {
