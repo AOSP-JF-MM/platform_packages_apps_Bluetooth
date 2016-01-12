@@ -1616,6 +1616,17 @@ public class AdapterService extends Service {
         }
     }
 
+    public void updateUuids() {
+       debugLog( "update uuids for bonded devices");
+       BluetoothDevice[] bondedDevices = getBondedDevices();
+       if (bondedDevices == null) {
+           return ;
+       }
+       for (BluetoothDevice device : bondedDevices) {
+           mRemoteDevices.updateUuids(device);
+       }
+    }
+
      private void autoConnectHeadset(){
         HeadsetService  hsService = HeadsetService.getHeadsetService();
 
