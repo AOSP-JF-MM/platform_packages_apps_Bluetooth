@@ -30,6 +30,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.bluetooth.BluetoothSap;
 
 //import com.android.internal.telephony.RIL;
 import com.google.protobuf.micro.CodedOutputStreamMicro;
@@ -311,7 +312,6 @@ public class SapServer extends Thread implements Callback {
 
             mRilBtReceiver = new SapRilReceiver(mSapHandler, mSapServiceHandler);
             mRilBtReceiverThread = new Thread(mRilBtReceiver, "RilBtReceiver");
-            setNotification(SapMessage.DISC_GRACEFULL,0);
             boolean done = false;
             while (!done) {
                 if(VERBOSE) Log.v(TAG, "Waiting for incomming RFCOMM message...");
@@ -791,6 +791,14 @@ public class SapServer extends Thread implements Callback {
                             mState == SAP_STATE.CONNECTING ||
                             mState == SAP_STATE.DISCONNECTING) {
                         sapMsg = null;
+                    }
+                    if (mSapServiceHandler != null && mState == SAP_STATE.CONNECTED) {
+                        Message msg = Message.obtain(mSapServiceHandler);
+                        msg.what = SapService.MSG_CHANGE_STATE;
+                        msg.arg1 = BluetoothSap.STATE_CONNECTED;
+                        msg.sendToTarget();
+                        setNotification(SapMessage.DISC_GRACEFULL, 0);
+                        if (DEBUG) Log.d(TAG, "MSG_CHANGE_STATE sent out.");
                     }
                     break;
                 default:
