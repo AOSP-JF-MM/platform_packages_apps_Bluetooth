@@ -827,13 +827,16 @@ public class SapService extends ProfileService {
 
                 if (DEBUG) Log.d(TAG,"ACL disconnected for " + device);
 
-                if (mRemoteDevice.equals(device) && mRemoveTimeoutMsg) {
-                    // Send any pending timeout now, as ACL got disconnected.
-                    cancelUserTimeoutAlarm();
-                    mSessionStatusHandler.removeMessages(USER_TIMEOUT);
-                    sendCancelUserConfirmationIntent(mRemoteDevice);
+                if (mRemoteDevice.equals(device)) {
+                    if (mRemoveTimeoutMsg) {
+                        // Send any pending timeout now, as ACL got disconnected.
+                        cancelUserTimeoutAlarm();
+                        mSessionStatusHandler.removeMessages(USER_TIMEOUT);
+                        sendCancelUserConfirmationIntent(mRemoteDevice);
+                        mRemoveTimeoutMsg = false;
+                    }
                     mIsWaitingAuthorization = false;
-                    mRemoveTimeoutMsg = false;
+                    setState(BluetoothSap.STATE_DISCONNECTED);
                     // Ensure proper cleanup, and prepare for new connect.
                     mSessionStatusHandler.sendEmptyMessage(MSG_SERVERSESSION_CLOSE);
                 }
