@@ -923,12 +923,11 @@ final class A2dpSinkStateMachine extends StateMachine {
     boolean okToConnect(BluetoothDevice device) {
         AdapterService adapterService = AdapterService.getAdapterService();
         int priority = mService.getPriority(device);
-        boolean ret = false;
         //check if this is an incoming connection in Quiet mode.
         if((adapterService == null) ||
            ((adapterService.isQuietModeEnabled() == true) &&
            (mTargetDevice == null))){
-            ret = false;
+            return false;
         }
         // check priority and accept or reject the connection. if priority is undefined
         // it is likely that our SDP has not completed and peer is initiating the
@@ -936,9 +935,9 @@ final class A2dpSinkStateMachine extends StateMachine {
         else if((BluetoothProfile.PRIORITY_OFF < priority) ||
                 ((BluetoothProfile.PRIORITY_UNDEFINED == priority) &&
                 (device.getBondState() != BluetoothDevice.BOND_NONE))){
-            ret= true;
+            return true;
         }
-        return ret;
+        return false;
     }
 
     synchronized List<BluetoothDevice> getDevicesMatchingConnectionStates(int[] states) {
