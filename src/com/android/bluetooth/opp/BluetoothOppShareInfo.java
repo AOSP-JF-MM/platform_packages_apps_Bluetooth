@@ -96,6 +96,7 @@ public class BluetoothOppShareInfo {
             if (mStatus == BluetoothShare.STATUS_PENDING && mUri != null) {
                 return true;
             }
+
         } else if (mDirection == BluetoothShare.DIRECTION_INBOUND) {
             if (mStatus == BluetoothShare.STATUS_PENDING) {
                 //&& mConfirm != BluetoothShare.USER_CONFIRMATION_PENDING) {
